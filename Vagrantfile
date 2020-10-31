@@ -15,6 +15,9 @@ Vagrant.configure(2) do |config|
             node.vm.provision "ansible" do |ansible|
                 ansible.limit           = "all"
                 ansible.playbook        = "playbook.yaml"
+                ansible.groups          = {
+                    "riak_nodes" => ["riak0[1:5]"]
+                }
             end
         end
     end

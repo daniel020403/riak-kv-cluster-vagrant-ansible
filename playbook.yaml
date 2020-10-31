@@ -20,7 +20,7 @@
       service: name=ntp state=restarted
 
 - name: install Riak environment prerequisites
-  hosts: all
+  hosts: riak_nodes
 
   tasks:
     - name: install apt-transport-https
