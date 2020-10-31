@@ -1,0 +1,28 @@
+---
+- name: update apt packages
+  hosts: all
+
+  tasks:
+    - name: apt-get update
+      become: yes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: setup network time
+  hosts: all
+
+  tasks:
+    - name: ensure ntpd is at the latest version
+      become: yes
+      apt: name=ntp state=latest
+
+  handlers:
+    - name: restart ntp
+      service: name=ntp state=restarted
+
+- name: install Riak environment prerequisites
+  hosts: all
+
+  tasks:
+    - name: install apt-transport-https
+      become: yes
+      apt: name=apt-transport-https state=latest

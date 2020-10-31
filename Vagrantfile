@@ -11,6 +11,11 @@ Vagrant.configure(2) do |config|
                 v.memory    = 512
                 v.cpus      = 1
             end
+
+            node.vm.provision "ansible" do |ansible|
+                ansible.limit           = "all"
+                ansible.playbook        = "playbook.yaml"
+            end
         end
     end
 
