@@ -12,12 +12,12 @@ Vagrant.configure(2) do |config|
                 v.cpus      = 1
             end
 
-            node.vm.provision "ansible" do |ansible|
-                ansible.limit           = "all"
-                ansible.playbook        = "playbook.yaml"
-                ansible.groups          = {
-                    "riak_nodes" => ["riak0[1:5]"]
-                }
+            if i == 5
+                node.vm.provision "ansible" do |ansible|
+                    ansible.limit           = "all"
+                    ansible.inventory_path  = "provision/inventory/"
+                    ansible.playbook        = "provision/playbook/playbook.yaml"
+                end
             end
         end
     end
