@@ -54,6 +54,8 @@
         RIAK_PB_PORT: '{{ riak_pb_port }}'
         RIAK_HTTP_PORT: '{{ riak_http_port }}'
         DISTRIBUTED_COOKIE: '{{ distributed_cookie }}'
+      notify:
+        - start Riak
 
     - name: cleanup downloaded Riak package
       become: yes
@@ -61,6 +63,11 @@
         path: /tmp/riak_ee.deb
         state: absent
 
+    - name: cleanup apt
+      become: yes
+      apt: autoremove=true autoclean=true
+
   handlers:
     - name: start Riak
+      become: yes
       service: name=riak state=restarted
