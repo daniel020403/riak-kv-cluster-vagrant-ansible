@@ -14,9 +14,12 @@
     - name: ensure ntpd is at the latest version
       become: yes
       apt: name=ntp state=latest
+      notify:
+        - restart ntp
 
   handlers:
     - name: restart ntp
+      become: yes
       service: name=ntp state=restarted
 
 - name: prepare Riak environment
@@ -57,3 +60,7 @@
       file:
         path: /tmp/riak_ee.deb
         state: absent
+
+  handlers:
+    - name: start Riak
+      service: name=riak state=restarted
