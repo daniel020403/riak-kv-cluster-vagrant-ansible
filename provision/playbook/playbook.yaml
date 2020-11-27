@@ -22,67 +22,67 @@
       become: yes
       service: name=ntp state=restarted
 
-# - name: prepare Riak environment
-#   hosts: riak_nodes
+- name: prepare Riak environment
+  hosts: riak_nodes
 
-#   tasks:
-#     - name: install apt-transport-https
-#       become: yes
-#       apt: name=apt-transport-https state=latest
+  tasks:
+    - name: install apt-transport-https
+      become: yes
+      apt: name=apt-transport-https state=latest
 
-#     # - name: operating system tuning
-#     #   become: yes
-#     #   script: ubuntu-os-tuning.sh
+    - name: operating system tuning
+      become: yes
+      script: ubuntu-os-tuning.sh
 
-# - name: setup Riak cluster
-#   hosts: riak_nodes
+- name: setup Riak cluster
+  hosts: riak_nodes
 
-#   tasks:
-#     - name: download Riak package
-#       become: yes
-#       get_url:
-#         url: '{{ riak_package }}'
-#         dest: /tmp/riak_ee.deb
-#         mode: '0700'
+  tasks:
+    - name: download Riak package
+      become: yes
+      get_url:
+        url: '{{ riak_package }}'
+        dest: /tmp/riak_ee.deb
+        mode: '0700'
 
-#     - name: install Riak
-#       become: yes
-#       script: ubuntu-os-riak-install.sh
-#       environment:
-#         RIAK_NAME: '{{ riak_name }}'
-#         RIAK_IP: '{{ riak_ip }}'
-#         RIAK_PB_PORT: '{{ riak_pb_port }}'
-#         RIAK_HTTP_PORT: '{{ riak_http_port }}'
-#         DISTRIBUTED_COOKIE: '{{ distributed_cookie }}'
-#       notify:
-#         - start Riak
+    - name: install Riak
+      become: yes
+      script: ubuntu-os-riak-install.sh
+      environment:
+        RIAK_NAME: '{{ riak_name }}'
+        RIAK_IP: '{{ riak_ip }}'
+        RIAK_PB_PORT: '{{ riak_pb_port }}'
+        RIAK_HTTP_PORT: '{{ riak_http_port }}'
+        DISTRIBUTED_COOKIE: '{{ distributed_cookie }}'
+      notify:
+        - start Riak
 
-#     # - name: join nodes to cluster
-#     #   become: yes
-#     #   script: join-nodes.sh
-#     #   environment:
-#     #     CLUSTER_PROCESS: join
-#     #     CLUSTER_01_FIRST_NODE_NAME: riak01
-#     #     CLUSTER_01_FIRST_NODE_IP: 192.168.33.11
-#     #     RIAK_NAME: '{{ riak_name }}'
-#     #     RIAK_IP: '{{ riak_ip }}'
-#     #   notify:
-#     #     - Riak cluster commit join
+    # - name: join nodes to cluster
+    #   become: yes
+    #   script: join-nodes.sh
+    #   environment:
+    #     CLUSTER_PROCESS: join
+    #     CLUSTER_01_FIRST_NODE_NAME: riak01
+    #     CLUSTER_01_FIRST_NODE_IP: 192.168.33.11
+    #     RIAK_NAME: '{{ riak_name }}'
+    #     RIAK_IP: '{{ riak_ip }}'
+    #   notify:
+    #     - Riak cluster commit join
 
-#     - name: cleanup downloaded Riak package
-#       become: yes
-#       file:
-#         path: /tmp/riak_ee.deb
-#         state: absent
+    - name: cleanup downloaded Riak package
+      become: yes
+      file:
+        path: /tmp/riak_ee.deb
+        state: absent
 
-#     - name: cleanup apt
-#       become: yes
-#       apt: autoremove=true autoclean=true
+    - name: cleanup apt
+      become: yes
+      apt: autoremove=true autoclean=true
 
-#   handlers:
-#     - name: start Riak
-#       become: yes
-#       service: name=riak state=restarted
+  handlers:
+    - name: start Riak
+      become: yes
+      service: name=riak state=restarted
 
     # - name: Riak cluster commit join
     #   become: yes
@@ -94,18 +94,18 @@
   hosts: all
 
   tasks:
-    # - name: copy '{{ node_exporter_package }}' to hosts
-    #   become: yes
-    #   copy:
-    #     src: '{{ node_exporter_package }}'
-    #     dest: '/tmp/{{ node_exporter_package }}'
-    #     mode: '0700'
+    - name: copy '{{ node_exporter_package }}' to hosts
+      become: yes
+      copy:
+        src: '{{ node_exporter_package }}'
+        dest: '/tmp/{{ node_exporter_package }}'
+        mode: '0700'
 
-    # - name: install Node Exporter
-    #   become: yes
-    #   script: node-exporter-install.sh
-    #   environment:
-    #     NODE_EXPORTER_PACKAGE: '{{ node_exporter_package }}'
+    - name: install Node Exporter
+      become: yes
+      script: node-exporter-install.sh
+      environment:
+        NODE_EXPORTER_PACKAGE: '{{ node_exporter_package }}'
 
     - name: run Node Exporter
       become: yes
@@ -114,8 +114,8 @@
         count: 1
         units: minutes
 
-    # - name: cleanup downloaded Node Exporter package
-    #   become: yes
-    #   file:
-    #     path: '/tmp/{{ node_exporter_package }}'
-    #     state: absent
+    - name: cleanup downloaded Node Exporter package
+      become: yes
+      file:
+        path: '/tmp/{{ node_exporter_package }}'
+        state: absent
